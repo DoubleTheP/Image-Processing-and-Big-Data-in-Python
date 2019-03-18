@@ -9,9 +9,11 @@ epsilon = 0.075
 minPoint = 5
 n_samples = 1000
 
-noisy_moons, y = make_moons(n_samples=n_samples, noise=.05)
+n_centers = 4
 
-colors = cm.rainbow(np.linspace(0, 1, n_samples-2))
+X, y = make_blobs(n_samples=n_samples, n_features=2, centers=n_centers, cluster_std=1, random_state=1)
+#noisy_moons, y = make_moons(n_samples=n_samples, noise=.05)
+
 checked = np.zeros((n_samples, 1), bool)
 cluster_number = np.zeros((n_samples, 1), dtype=np.int)
 assigned = np.zeros((n_samples, 1), dtype=np.int)
@@ -60,7 +62,7 @@ def detect_densities(start, cluster_no, Data):
 
 detect_densities(start, cluster_no, Data)
 
-print(start)
+print(cluster_no)
 
 
 
