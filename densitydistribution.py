@@ -1,57 +1,60 @@
-from sklearn.datasets.samples_generator import make_moons
-from sklearn import cluster, datasets
+from sklearn.datasets import make_moons
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import random
-import operator
-import math
-import matplotlib.cm as cm
 
 
-n_centers = 2
+epsilon = 0.075
+minPoint = 5
 n_samples = 1000
 
-noisy_moons, y = datasets.make_moons(n_samples=n_samples, noise=.05)
-#for i in range(2):
-	#plt.scatter(noisy_moons[:, 0], noisy_moons[:, 1], color="black")
+noisy_moons, y = make_moons(n_samples=n_samples, noise=.05)
 
-class Node:
-	def __init__(self, content=None, next=None):
-		self.content = content
-		self.next = next
-
-	def __str__(self):
-		return str(self.content)
 colors = cm.rainbow(np.linspace(0, 1, n_samples-2))
-#Data = [noisy_moons, y];
-Data = noisy_moons
-start = random.randint(0,9)
-Datenliste = []	
-for j,c in zip(range(len(Data)-1), colors):
-	checklist = []
-	for i in range(len(Data)):
-	#	for i in [Data for Data in range(100) if Data != start]:
-		if i != start:
-			checklist.append(np.linalg.norm(Data[i]-Data[start]))
-	
-	Datenliste.append(Data[start])
-	Data = np.delete(Data,start,0)
-	start = np.argmin(checklist)
-	plt.scatter(Datenliste[j][0],Datenliste[j][1],color=c)
-	plt.pause(0.05)
+checked = np.zeros((n_samples, 1), bool)
+cluster_number = np.zeros((n_samples, 1), dtype=np.int)
+assigned = np.zeros((n_samples, 1), dtype=np.int)
+Data = np.concatenate((noisy_moons, checked, cluster_number, assigned), axis=1)
 
 
-x = []
-y = []
-for i in range(len(Datenliste)-1):
-	x.append(np.linalg.norm(Datenliste[i]-Datenliste[i+1]))
-	y.append(i)
+start = random.randint(0,n_samples-1)
 
 
-for i,c in zip(range(n_samples),colors):
-	plt.scatter(Datenliste[i][0],Datenliste[i][1],color=c)
+k = [1]
+
+while len(k) != 0:
+    checklist = []
+    for i in range(len(Data)):
+        if np.linalg.norm(Data[i][:2]-Data[start][:2]) <= epsilon:
+            checklist.append([np.linalg.norm(Data[i][:2]-Data[start][:2]),i])
+            Data[i][3] = 1
+    Data[start][2] = True
+    if len(checklist) >= minPoint:#core
+       Data[start][4] = "1"
+    elif len(checklist) == 0:
+        Data[start][4] = "3" #outline
+    else:
+        Data[start][4] = "2" #border
+
+    k = []
+    for i in range(len(Data)):
+        if Data[i][3] == 1 and Data[i][2] == False:
+            k.append(i)
+            start = i
+    print(len(k))
+
+
+
+
+
+
+
+
+for i in range(len(Data)):
+    if Data[i][3] == 1:
+    	plt.scatter(Data[i][0], Data[i][1], c="red", s=10)
+    else:
+    	plt.scatter(Data[i][0], Data[i][1], c="black", s=10)
+
 plt.show()
-	
-	#Data= np.delete(Data,start,0)
-	#print(Datenliste)
