@@ -22,7 +22,6 @@ start = random.randint(0,n_samples-1)
 
 
 k = [1]
-
 while len(k) != 0:
     checklist = []
     for i in range(len(Data)):
@@ -42,19 +41,15 @@ while len(k) != 0:
         if Data[i][3] == 1 and Data[i][2] == False:
             k.append(i)
             start = i
-    print(len(k))
-
-
-
-
-
 
 
 
 for i in range(len(Data)):
-    if Data[i][3] == 1:
+    if Data[i][4] == 1:
+    	plt.scatter(Data[i][0], Data[i][1], c="green", s=10)
+    elif Data[i][4] == 2:
     	plt.scatter(Data[i][0], Data[i][1], c="red", s=10)
     else:
-    	plt.scatter(Data[i][0], Data[i][1], c="black", s=10)
+        plt.scatter(Data[i][0], Data[i][1], facecolors='none', edgecolors="black", s=10)
 
 plt.show()
