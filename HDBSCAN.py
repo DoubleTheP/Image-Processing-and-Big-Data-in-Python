@@ -4,14 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-n_Samples = 300
-n_Noise = 100
-n_Points = 20
-n_Centers = 2
+n_Samples = 0
+n_Noise = 10000
+n_Points = 5
+n_Centers = 5
 
-X, y = make_blobs(n_samples=n_Samples, n_features=2, centers=n_Centers, cluster_std=1, random_state=1)
-X, y = make_moons(n_samples=n_Samples, noise=.05)
-checked = (np.random.rand(n_Noise,2)-0.5)*5
+X, y = make_blobs(n_samples=n_Samples, n_features=2, centers=n_Centers, cluster_std=2, random_state=1)
+checked, y = make_moons(n_samples=n_Noise, noise=.1)
+#checked, y = (np.random.rand(n_Noise,2)-0.5)*5
 X = np.concatenate((X, checked), axis=0)
 
 
@@ -65,7 +65,7 @@ plt.colorbar()
 plt.show()
 
 for i in range(n_Samples):
-    if data[i][-1] > 40:
+    if data[i][-1] > 20:
         plt.scatter(X[i], Y[i], facecolors='none', edgecolors='b')
     else:
         plt.scatter(X[i], Y[i], facecolors='none', edgecolors='r')
